@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResultResponseDto {
 	private boolean result;
-	
+ 	
 }

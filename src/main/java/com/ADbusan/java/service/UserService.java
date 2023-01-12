@@ -1,5 +1,9 @@
 package com.ADbusan.java.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,31 @@ import com.ADbusan.java.repository.MemberRepository;
 @Service
 public class UserService {
 	@Autowired MemberRepository memberRepository;
+	
+	public ResponseDto<List<GetUserResponseDto>>getAllUser(){
+		List<MemberEntity> memberlist = memberRepository.findAll();
+		List<GetUserResponseDto> data = new ArrayList<GetUserResponseDto>();
+		for(MemberEntity member: memberlist) {
+			data.add(new GetUserResponseDto(member));
+		}
+		return ResponseDto.setSuccess("get user list success", data);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public ResponseDto<GetUserResponseDto>getUser(String email){
 //		해당 이메일을 데이터베이스에서 검색
 		MemberEntity member;
@@ -44,23 +73,17 @@ public class UserService {
 //		존재한다면 failed response를 반환
 //		select * from m where email =?
 		String email = dto.getEmail();
-		
-		
 		try {
 			if (memberRepository.existsById(email))
 				return ResponseDto.setFailed("이미 존재하는 이메일 입니다.");
 		} catch (Exception e) {
 			return ResponseDto.setFailed("데이터베이스 오류입니다.");
 		}
-
-		
-		
 //		try {
 //			MemberEntity member = memberRepository.findById(email).get();
 //		}catch (Exception e) {
 //			return ResponseDto.setFailed("이미 존재하는 이메일 입니다.");
 //		}
-		
 		String password = dto.getPassword();
 		String password2 = dto.getPassword2();
 		if(!password.equals(password2)) return ResponseDto.setFailed("비밀번호가 서로 다릅니다.");
@@ -78,7 +101,6 @@ public class UserService {
 //		!!하지뫈!!
 //		해당 entity id가 데이터베이스 테이블에 존재하면!
 //		존재하는 entity update 작업을 수행
-		
 		memberRepository.save(member);
 		return ResponseDto.setSuccess("회원가입에 성공", new ResultResponseDto(true));
 	}
